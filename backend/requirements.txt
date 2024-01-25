@@ -1,3 +1,9 @@
 flask
 psycopg2-binary
 flask-cors
+requests
+pandas
+python-dotenv
+pandarallel
+openai
+boto3
