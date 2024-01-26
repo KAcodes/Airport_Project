@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import FlightTable from './FlightTable';
 
 
 const Flights = () => {
@@ -8,11 +9,13 @@ const Flights = () => {
   const fetchData = async () => {
       try {
         // Make a request to your Flask API endpoint with the search query
-        const response = await fetch(`/countries/${searchQuery}`);
+        const response = await fetch(`/departures/${searchQuery}`);
         const data = await response.json();
-        const result = data["results"]
+        
         // Update state with the retrieved Flight information
-        setFlightInfo(result);
+        console.log(data)
+        setFlightInfo(data)
+        // setFlightInfo(result);
       } catch (error) {
         console.error('Error fetching Flight information:', error);
         // Handle errors as needed
@@ -31,7 +34,7 @@ const Flights = () => {
       <h1>Flight Information</h1>
       <input
         type="text"
-        placeholder="Search for a Flight"
+        placeholder="Search for an Airport"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
@@ -39,7 +42,7 @@ const Flights = () => {
 
       {FlightInfo && (
         <div>
-          <h2>{FlightInfo}</h2>
+          <FlightTable flight_data={FlightInfo}/>
           {/* Display other Flight information as needed */}
         </div>
       )}
