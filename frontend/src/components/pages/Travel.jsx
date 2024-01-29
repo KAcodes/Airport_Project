@@ -3,7 +3,7 @@ import React from 'react'
 const Travel = () => {
   return (
     <div>
-        Hello
+        Find Your Perfect Holiday
     </div>
   )
 }

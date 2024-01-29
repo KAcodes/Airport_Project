@@ -1,20 +1,22 @@
+import React from 'react';
 import './App.css';
-
-import React, { useState, useEffect } from 'react';
-import Flights from './components/Flights';
-import Travel from './components/Travel';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/organisms/Header';
+import Navbar from './components/organisms/Navbar';
+import { Pages } from 'components/routes/routes';
 
 
 const App = () => {
   
-  
-
   return (
     <>
-      <div>
-        <Flights/>
-        <Travel/>
-      </div>
+        <Header/>
+        <div className='grid  bg-red-600'>
+          <Router>
+            <Navbar/>
+              <Pages />
+          </Router>
+        </div>
     </>
   );
 };

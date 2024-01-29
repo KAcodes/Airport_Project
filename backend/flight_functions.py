@@ -1,4 +1,4 @@
-
+"""Functions for """
 import json
 from os import environ
 import logging
@@ -42,13 +42,13 @@ def calculate_flight_hours(duration: int) -> str:
         return f"{hours}:{mins}0"
     return f"{hours}:{mins}"
 
-# flight number - flight_iata
-    # departure time - dep_time_utc
-    # arrival airport iata - arr_iata
-    # arrival airport name - database
-    # arrival country - database
-    # arrival time - arr_time_utc
-    # flight_duration - duration
+
+def calculate_flight_hours(duration: int) -> str:
+    hours = duration//60
+    mins = duration % 60
+    if len(str(mins)) == 1:
+        return f"{hours}h:{mins}0m"
+    return f"{hours}h:{mins}m"
 
 def clean_flight_data(flight_departures: list, db_connection: connection):
 
@@ -76,14 +76,7 @@ def clean_flight_data(flight_departures: list, db_connection: connection):
             if airport_info is None:
                 continue
             flight["destination_airport"], flight["destination_country"] = airport_info[0], airport_info[1]
-            
+            flight["duration"] = calculate_flight_hours(flight["duration"])
             transformed_flights.append(flight)
 
     return transformed_flights
-
-if __name__ == "__main__":
-
-    db_conn = get_db_connection()
-    flights = get_flights_from_iata("LGW")
-    clean_flight_data(flights, db_conn)
-    
