@@ -37,16 +37,15 @@ def generate_topic(holiday_details: json) -> str:
 
     user_age = holiday_details["age"]
     user_gender = holiday_details["gender"]
-    user_destination = holiday_details["destination"]
+    user_destination = holiday_details["location"]
     holiday_duration = holiday_details["duration"]
-
 
     system_content_spec = """
         You are a helpful assistant giving people travel ideas given their age,
         what country they are going and who they are with and how long they are there for.
-        Specify each day with a number"""
+        """
     user_content_spec = f"""I am a {user_age} {user_gender}, going to {user_destination} by myself 
-    for {holiday_duration}. What is there to do?"""
+    for {holiday_duration} days. What is there to do?"""
 
     try:
         completion = client.chat.completions.create(
@@ -59,5 +58,3 @@ def generate_topic(holiday_details: json) -> str:
         return completion.choices[0].message.content
     except openai.APIError as error:
         return handle_openai_errors(error)
-
-

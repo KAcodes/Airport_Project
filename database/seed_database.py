@@ -22,6 +22,7 @@ def get_db_connection() -> connection:
             port=environ["DB_PORT"],
             database=environ["DB_NAME"],
             user=environ["DB_USER"],
+            password=environ["DB_PASSWORD"]
         )
         return conn
     except psycopg2.OperationalError as error:

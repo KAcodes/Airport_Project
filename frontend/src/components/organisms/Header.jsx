@@ -4,7 +4,7 @@ const Header = () => {
   return (
     <div className='flex flex-row w-full min-h-12'>
         <div>
-            <p>Logo</p>
+            <p>gotravel Logo</p>
         </div>
         <div>
 

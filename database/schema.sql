@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS gotravel;
+CREATE DATABASE gotravel;
 DROP TABLE IF EXISTS airports;
 DROP TABLE IF EXISTS countries;
 

@@ -3,7 +3,7 @@ import React from 'react'
 const FlightTable = ({flight_data}) => {
   return (
     
-    <table classNAME="table-auto">
+    <table className="table-auto">
         <thead>
             <tr>
             <th>Flight Number</th>
@@ -18,7 +18,7 @@ const FlightTable = ({flight_data}) => {
         <tbody>
             {flight_data && (
                 flight_data.map((flight, flight_id) => (
-                    <tr>
+                    <tr key={flight_id}>
                         <td>{flight["flight_iata"]}</td>
                         <td>{flight["destination_airport"]}</td>
                         <td>{flight["arr_iata"]}</td>

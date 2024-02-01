@@ -13,7 +13,7 @@ const TabGroup = () => {
     <StyledTabGroup>
       <Button 
         title='Plan Holiday' 
-        color='primary' 
+        color='secondary' 
         onClick={() => navigate(paths.home)}
       />
       <Button 
