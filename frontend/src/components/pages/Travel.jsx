@@ -1,19 +1,17 @@
 import SideBar from 'components/organisms/SideBar'
 import React from 'react'
-import {useStore} from 'store/store'
+import HolidayResults from 'components/organisms/HolidayResults'
 
 const Travel = () => {
-
-  const { aiHolidayResponse } = useStore();
 
   return (
     <div className='flex flex-row h-screen'>
       <div className='bg-blue-400 w-1/5'>
-          <SideBar></SideBar>
+          <SideBar/>
       </div>
       <div className='bg-green-400 w-3/5'>
           <p>Holiday Suggestions</p>
-          <p>{aiHolidayResponse}</p>
+          <HolidayResults/>
       </div>
       <div className='bg-yellow-400 w-1/5'>
           <p>Hello</p>

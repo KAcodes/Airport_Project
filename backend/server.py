@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request
 from flight_functions import (get_flights_from_iata, clean_flight_data, get_db_connection)
 from dotenv import load_dotenv
-from holiday_maker import generate_topic
+from holiday_maker import generate_topic, format_ai_response
 
 load_dotenv()
 app = Flask(__name__)
@@ -30,10 +30,11 @@ def make_holiday() -> dict:
     """Endpoint creates a holiday given specified details in input form"""
 
     holiday_details = request.json
-
     ai_response = generate_topic(holiday_details)
-    print(ai_response)
-    return jsonify(ai_response)
+    formatted_response = format_ai_response(ai_response)
+    return jsonify({
+        "response": formatted_response
+    })
 
 if __name__ == "__main__":
     # app.run(debug=True, host="0.0.0.0", port=5000)

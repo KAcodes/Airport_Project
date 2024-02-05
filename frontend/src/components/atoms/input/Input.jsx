@@ -6,9 +6,20 @@ const FormInput = ({
     value,
     color,
     onChange,
-    placeholder
+    placeholder,
+    type,
+    min,
+    max
 }) => {
-    return <StyledInput color={color} onChange={onChange} name={name} value={value} placeholder={placeholder}>
+    return <StyledInput 
+                type={type} 
+                color={color} 
+                onChange={onChange} 
+                name={name} 
+                value={value}
+                placeholder={placeholder}
+                min={min}
+                max={max}>
         </StyledInput>
 }
 

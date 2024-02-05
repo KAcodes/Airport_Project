@@ -3,9 +3,8 @@ import {create} from 'zustand';
 const useStore = create((set) => ({
   formValues: {
     location: '',
-    duration: '',
-    age: '',
-    gender: ''
+    children: 0,
+    adults: 2
   },
   setFormValue: (fieldName, value) => set((state) => ({ formValues: { ...state.formValues, [fieldName]: value } })),
   aiHolidayResponse: [],
@@ -15,7 +14,6 @@ const useStore = create((set) => ({
 const calendarStore = create((set) => ({
   selectedDates: ([new Date(), new Date()]),
   setSelectedDates: (dates) => set(() => ({ selectedDates: dates})),
-  
 }));
 
-export {useStore, calendarStore};
+export {calendarStore, useStore} ;
