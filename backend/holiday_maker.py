@@ -2,12 +2,18 @@
 from datetime import datetime
 from os import environ
 import json
-import psycopg2
 import logging
+
 from dotenv import load_dotenv
 import pandas as pd
 import openai
 from pandarallel import pandarallel
+from psycopg2.extras import RealDictCursor
+import psycopg2
+
+from flight_functions import get_db_connection
+
+
 
 load_dotenv()
 VALID_TOPIC_IDS = ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11")
@@ -37,6 +43,27 @@ def calculate_holiday_duration(date1, date2):
     d2 = datetime.strptime(date2, "%d/%m/%Y")
     day_difference = (d2 - d1).days
     return "a day trip" if day_difference == 0 else f"a {day_difference} night trip"
+
+
+def find_city_db(searched_city, db_connection):
+    with db_connection.cursor(cursor_factory=RealDictCursor) as cursor:
+        try: 
+            query = f"%{searched_city}%"
+            cursor.execute(
+                """SELECT city_id, city_name, countries.country_name FROM cities
+                JOIN countries ON cities.country_id = countries.country_id
+                WHERE city_name ILIKE %s""", (query,))
+            rows = cursor.fetchall()
+            return sorted(rows, key=lambda x: x["country_name"])
+    
+        except psycopg2.Error as e:
+            print(f"Error executing SQL query: {e}")
+            return ({"error": "Database query error"}), 500
+        
+        finally:
+            cursor.close()
+            db_connection.close()
+
 
 def generate_topic(holiday_details: json) -> str:
     """Finds the most suitable topic for a url from a predefined list of topics 
@@ -74,16 +101,6 @@ def format_ai_response(holiday: str) -> list[str]:
     return [paragraph for paragraph in holiday_ideas if paragraph]
 
 
-print(format_ai_response("""
-For a group of adults traveling to Paris for a 3-night trip, there are plenty of cultural, historical, and entertainment options to consider. Here are a few ideas depending on your interests:
-
-1. Visit iconic landmarks like the Eiffel Tower, Louvre Museum, Notre-Dame Cathedral, and Arc de Triomphe.
-2. Explore the charming neighborhoods of Montmartre and Le Marais, known for their artistic and bohemian vibes.
-3. Enjoy a scenic Seine River cruise to take in the city's landmarks from a different perspective.
-4. Indulge in French cuisine at local bistros, cafes, and restaurants. Don't miss out on trying authentic French pastries and desserts.
-5. Take a day trip to the Palace of Versailles, just outside of Paris, to experience opulent royal history and beautiful gardens.
-
-Additionally, consider checking out any special events, exhibitions, or performances happening during your visit. Paris is known for its vibrant arts and cultural scene.
-
-Always ensure to check the latest travel advisories and local guidelines during your trip. Have a fantastic time in the City of Light!
-"""))
+if __name__ == "__main__":
+    conn = get_db_connection()
+    find_city_db("Paris", conn)

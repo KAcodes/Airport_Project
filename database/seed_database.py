@@ -30,11 +30,11 @@ def get_db_connection() -> connection:
         logging.exception("Error connecting to the database: %s", error)
 
 
-def load_airport_json() -> list:
+def load_json(file_name) -> list:
     """Load airport data from airports.json"""
-    with open('airports.json', encoding="UTF-8") as data:
-        airport_data = json.load(data)
-    return airport_data
+    with open(f'{file_name}.json', encoding="UTF-8") as data:
+        json_data = json.load(data)
+    return json_data
 
 
 def clean_airports(airports: list) -> pd.DataFrame:
@@ -51,6 +51,18 @@ def clean_airports(airports: list) -> pd.DataFrame:
     df = df.dropna()
     order = ['iata', 'name', 'iso', 'country', 'continent', 'lat', 'lon']
     df = df[order]
+
+    return df
+
+
+def clean_cities(cities: list) -> pd.DataFrame:
+    """Returns a dataframe of all airports cleaned from NaN values and formatted to enter db"""
+
+    df = pd.DataFrame.from_dict(cities)
+    df = df.drop(["pop", "admin1"], axis=1)
+
+    df['lat'] = pd.to_numeric(df['lat'], errors='coerce')
+    df['lon'] = pd.to_numeric(df['lon'], errors='coerce')
 
     return df
 
@@ -74,6 +86,37 @@ def populate_country_table(airports: pd.DataFrame, db_connection: connection):
 
         cursor.executemany(
             country_query, countries_insert)
+        db_connection.commit()
+
+
+def populate_cities_table(cities_df: pd.DataFrame, db_connection: connection):
+    """Populates countries table in PostgreSQL database from airport dataframe"""
+
+    cities = cities_df.sort_values("name")
+
+    cities_data = cities.values.tolist()
+    cities_query = """
+            INSERT INTO cities
+                (city_id, city_name, country_id, latitude, longitude)
+            VALUES
+                (%s, %s, %s, %s, %s);
+            """
+
+    cities_insert = []
+    with db_connection.cursor() as cursor:
+
+        for city in cities_data:
+
+            country_id_query = f"""SELECT country_id FROM countries
+                        WHERE iso LIKE '{city[2]}';"""
+            cursor.execute(country_id_query)
+            iso_check = cursor.fetchone()
+            if iso_check is not None:
+                city[2] = iso_check[0]
+                cities_insert.append(city)
+
+        cursor.executemany(
+            cities_query, cities_insert)
         db_connection.commit()
 
 
@@ -106,8 +149,11 @@ def populate_airports(airport_df: pd.DataFrame, db_connection: connection) -> No
 
 
 if __name__ == "__main__":
-    airport_list = load_airport_json()
-    cleaned_df = clean_airports(airport_list)
+    cities_list = load_json("cities")
+    cleaned_cities = clean_cities(cities_list)
+    # airport_list = load_json("airports")
+    # cleaned_airports = clean_airports(airport_list)
     db_conn = get_db_connection()
-    populate_country_table(cleaned_df, db_conn)
-    populate_airports(cleaned_df, db_conn)
+    # populate_country_table(cleaned_airports, db_conn)
+    # populate_airports(cleaned_airports, db_conn)
+    populate_cities_table(cleaned_cities, db_conn)

@@ -5,7 +5,6 @@ import DateRangePicker from '../Calendar/Calendar'
 import {useStore, calendarStore} from 'store/store'
 
 
-
 const InputGroup = () => {
 
     const { formValues, setFormValue, setAIHolidayResponse } = useStore();
@@ -13,20 +12,18 @@ const InputGroup = () => {
     const dept_date = selectedDates[0].toLocaleDateString()
     const return_date = selectedDates[1].toLocaleDateString()
 
-
     const handleChange = (e) => {
         const { name, value } = e.target;
-
         setFormValue(name, value);
     };
+
+    //ZOD
 
     const handleSubmit = async(e) => {
 
         e.preventDefault()
         const formData = formValues;
         const newData = {...formData, dept_date: dept_date, return_date: return_date}
-        console.log(newData)
-        // console.log('Form Data:', formData);
 
         try {
             const response = await fetch(`/holiday_planner`, {
