@@ -9,8 +9,8 @@ const HolidayPlan = () => {
 
   return (
     <>
-        {aiHolidayResponse && aiHolidayResponse.map((idea) => 
-            <HolidayDiv idea={idea} color="primary"/>
+        {aiHolidayResponse && aiHolidayResponse.map((idea, key) => 
+            <HolidayDiv key={key} idea={idea} color="primary"/>
         )}
     </>
   )

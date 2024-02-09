@@ -1,50 +1,48 @@
-// CityDropdown.js
 import React, { useState, useEffect } from 'react';
+import {useStore} from 'store/store'
+
 
 const CityDropdown = () => {
-  const [inputValue, setInputValue] = useState('');
+
+  const { formValues, setFormValue } = useStore();
   const [filteredCities, setFilteredCities] = useState([]);
 
   useEffect(() => {
-    const filterCities = async() => {
-        const response = await fetch(`/cities/${inputValue}`)
+
+    if (formValues.search_location.length >= 4)  {
+      const filterCities = async() => {
+        const response = await fetch(`/cities/${formValues.search_location}`)
         const data = await response.json();
         setFilteredCities(data)
     }
-    if (inputValue.trim() !== '') {
+    if (formValues.search_location.trim() !== '') {
       filterCities()
     } else {
       setFilteredCities([]);
     }
-  }, [inputValue]);
+    }
 
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+  }, [formValues.search_location]);
+
 
   const handleSelectCity = (selectedCity) => {
-    setInputValue(selectedCity);
-    setFilteredCities([]); // Clear the dropdown
+    setFormValue("location", `${selectedCity.city_name}, ${selectedCity.country_name}`);
+    setFormValue("city_id", selectedCity.city_id);
+    setFilteredCities([]);
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        value={inputValue}
-        onChange={handleInputChange}
-        placeholder="Type a city..."
-      />
+    <>
       {filteredCities.length > 0 && (
-        <ul>
+        <ul className='px-4 py-2 bg-blue-100 space-y-2 data-dropdown-toggle="dropdown"'>
           {filteredCities.map((city) => (
-            <li key={city} onClick={() => handleSelectCity(city)}>
-              {city}
+            <li className='hover:bg-gray-100 cursor-pointer' key={city.city_id} onClick={() => handleSelectCity(city)}>
+              {city.city_name}, {city.country_name}
             </li>
           ))}
         </ul>
       )}
-    </div>
+    </>
   );
 };
 

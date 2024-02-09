@@ -48,7 +48,7 @@ def calculate_holiday_duration(date1, date2):
 def find_city_db(searched_city, db_connection):
     with db_connection.cursor(cursor_factory=RealDictCursor) as cursor:
         try: 
-            query = f"%{searched_city}%"
+            query = f"{searched_city}%"
             cursor.execute(
                 """SELECT city_id, city_name, countries.country_name FROM cities
                 JOIN countries ON cities.country_id = countries.country_id
