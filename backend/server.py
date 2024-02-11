@@ -45,6 +45,12 @@ def get_city_suggestions(query):
     return jsonify(suggestions)
 
 
+@app.route('/holiday_planner/hotels', methods=['GET'])
+def find_hotels():
+
+    return
+
+
 if __name__ == "__main__":
     # app.run(debug=True, host="0.0.0.0", port=5000)
     app.run(debug=True)
