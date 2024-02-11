@@ -1,10 +1,8 @@
 """Functions for """
-import json
 from os import environ
 import logging
 import requests
 
-import pandas as pd
 import psycopg2
 from psycopg2.extensions import connection
 from dotenv import load_dotenv

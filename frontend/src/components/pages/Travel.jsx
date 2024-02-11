@@ -1,6 +1,7 @@
 import SideBar from 'components/organisms/SideBar'
 import React from 'react'
 import HolidayResults from 'components/organisms/HolidayResults'
+import HotelResults from 'components/organisms/HotelResults'
 
 const Travel = () => {
 
@@ -14,7 +15,7 @@ const Travel = () => {
           <HolidayResults/>
       </div>
       <div className='bg-yellow-400 w-1/5'>
-          <p>Hello</p>
+          <HotelResults/>
       </div>
     </div>
   )

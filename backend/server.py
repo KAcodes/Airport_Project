@@ -1,16 +1,13 @@
 """Backend API for use on Social News scraping site"""
 from flask import Flask, jsonify, request
-from flight_functions import (get_flights_from_iata, clean_flight_data, get_db_connection)
 from dotenv import load_dotenv
-from holiday_maker import generate_topic, format_ai_response, find_city_db
+import pandas as pd
+
+from flight_functions import (get_flights_from_iata, clean_flight_data, get_db_connection)
+from holiday_maker import generate_holiday, format_ai_response, find_city_suggestions, find_coordinates, find_nearest_hotels
 
 load_dotenv()
 app = Flask(__name__)
-
-# @app.route("/", methods=["GET"])
-# def index():
-#     """Gets stories page from html static file"""
-#     return current_app.send_static_file("index.html")
 
 
 @app.route("/departures/<iata>", methods=["GET"])
@@ -30,7 +27,7 @@ def make_holiday() -> dict:
     """Endpoint creates a holiday given specified details in input form"""
 
     holiday_details = request.json
-    ai_response = generate_topic(holiday_details)
+    ai_response = generate_holiday(holiday_details)
     formatted_response = format_ai_response(ai_response)
     return jsonify({
         "response": formatted_response
@@ -41,14 +38,23 @@ def make_holiday() -> dict:
 def get_city_suggestions(query):
     
     db_connection = get_db_connection()
-    suggestions = find_city_db(query, db_connection)
+    suggestions = find_city_suggestions(query, db_connection)
     return jsonify(suggestions)
 
 
-@app.route('/holiday_planner/hotels', methods=['GET'])
+@app.route('/holiday_planner/hotels', methods=['POST'])
 def find_hotels():
-
-    return
+    
+    db_connection = get_db_connection()
+    holiday_details = request.json
+    city_coordinates = find_coordinates(db_connection, holiday_details)
+    nearest_hotels = find_nearest_hotels(city_coordinates, holiday_details)
+    # df = pd.read_csv('hotels.csv').to_json()
+    # print(df)
+    # # test = df.values.tolist()
+    return jsonify({
+        "api_response": nearest_hotels
+    }), 200
 
 
 if __name__ == "__main__":
