@@ -1,10 +1,13 @@
 export const colors = {
-    primary: {
-        text: '#FFFFFF',
-        backgroundColor: '#7FB2B2'
-    },
-    secondary: {
-        text: '#7FB2B2',
-        backgroundColor: '#FFFFFF'
-    }
+  primary: {
+    text: "#FFFFFF",
+    backgroundColor: "#2392E6",
+  },
+  secondary: {
+    text: "#2392E6",
+    backgroundColor: "#FFFFFF",
+  },
+  uniform: {
+    lightBackgroundColor: "#7FB2B2",
+  },
 };

@@ -1,20 +1,22 @@
 import styled from "styled-components";
+import { colors } from "styles/theme/colors";
 
 export const QuarterColumn = styled.div`
   width: 25%;
   height: 100%;
-  display: inline-block;
-  background: yellow;
+  background: ${colors.uniform.lightBackgroundColor};
+  padding: 20px;
 `;
 
 export const HalfColumn = styled.div`
   width: 50%;
   height: 100%;
-  display: inline-block;
-  background: green;
+  padding: 20px;
 `;
 
 export const StyledThreeSplitPage = styled.div`
+  display: flex;
+  justify-content: center;
   height: 100%;
   padding-top: 125px;
 `;

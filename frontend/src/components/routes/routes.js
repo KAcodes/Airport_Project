@@ -1,6 +1,6 @@
 import Flights from "components/pages/Flights/Flights";
-import Travel from "components/pages/Travel";
-import Trends from "components/pages/Trends";
+import Travel from "components/pages/Travel/Travel";
+import Trends from "components/pages/Trends/Trends";
 import { useRoutes } from "react-router-dom";
 
 export const paths = {

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { colors } from "styles/theme/colors";
 
 export const StyledNavBar = styled.div`
   position: fixed;
