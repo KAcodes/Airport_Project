@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, request
 from flight_functions import (get_flights_from_iata, clean_flight_data, get_db_connection)
 from dotenv import load_dotenv
-from holiday_maker import generate_topic, format_ai_response
+from holiday_maker import generate_topic, format_ai_response, find_city_db
 
 load_dotenv()
 app = Flask(__name__)
@@ -35,6 +35,15 @@ def make_holiday() -> dict:
     return jsonify({
         "response": formatted_response
     })
+
+
+@app.route('/cities/<query>', methods=['GET'])
+def get_city_suggestions(query):
+    
+    db_connection = get_db_connection()
+    suggestions = find_city_db(query, db_connection)
+    return jsonify(suggestions)
+
 
 if __name__ == "__main__":
     # app.run(debug=True, host="0.0.0.0", port=5000)

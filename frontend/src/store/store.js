@@ -2,6 +2,8 @@ import {create} from 'zustand';
 
 const useStore = create((set) => ({
   formValues: {
+    search_location: '',
+    city_id: 0,
     location: '',
     children: 0,
     adults: 2

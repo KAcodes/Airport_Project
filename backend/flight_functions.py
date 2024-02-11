@@ -40,16 +40,9 @@ def calculate_flight_hours(duration: int) -> str:
     hours = duration//60
     mins = duration % 60
     if len(str(mins)) == 1:
-        return f"{hours}:{mins}0"
-    return f"{hours}:{mins}"
-
-
-def calculate_flight_hours(duration: int) -> str:
-    hours = duration//60
-    mins = duration % 60
-    if len(str(mins)) == 1:
         return f"{hours}h:{mins}0m"
     return f"{hours}h:{mins}m"
+
 
 def clean_flight_data(flight_departures: list, db_connection: connection):
 
