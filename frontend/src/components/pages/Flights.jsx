@@ -10,7 +10,6 @@ const Flights = () => {
 
   const fetchData = async (e) => {
     try {
-
       const response = await fetch(`/departures/${searchQuery}`);
       const data = await response.json();
 

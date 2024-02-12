@@ -28,6 +28,7 @@ const CityDropdown = () => {
   const handleSelectCity = (selectedCity) => {
     setFormValue("location", `${selectedCity.city_name}, ${selectedCity.country_name}`);
     setFormValue("city_id", selectedCity.city_id);
+    setFormValue("search_location", "");
     setFilteredCities([]);
   };
 
