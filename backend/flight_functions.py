@@ -35,6 +35,8 @@ def get_flights_from_iata(iata: str) -> list:
 
 
 def calculate_flight_hours(duration: int) -> str:
+    """Returns flight duration (minutes) in hours and minutes"""
+
     hours = duration//60
     mins = duration % 60
     if len(str(mins)) == 1:
@@ -42,7 +44,8 @@ def calculate_flight_hours(duration: int) -> str:
     return f"{hours}h:{mins}m"
 
 
-def clean_flight_data(flight_departures: list, db_connection: connection):
+def transform_flight_data(flight_departures: list, db_connection: connection):
+    """Transforms flight info to data required for departure table"""
 
     dept_list = []
     for departure in flight_departures:
@@ -53,10 +56,10 @@ def clean_flight_data(flight_departures: list, db_connection: connection):
         dept_list.append(departure)
 
     sorted_dept = sorted(dept_list, key=lambda x: x['dep_time_utc'])
-    
+
     transformed_flights = []
     with db_connection.cursor() as cursor:
-        
+
         for flight in sorted_dept:
 
             country_id_query = f"""SELECT airport_name, countries.country_name FROM airports
@@ -67,7 +70,9 @@ def clean_flight_data(flight_departures: list, db_connection: connection):
             airport_info = cursor.fetchone()
             if airport_info is None:
                 continue
-            flight["destination_airport"], flight["destination_country"] = airport_info[0], airport_info[1]
+
+            flight["destination_airport"] = airport_info[0]
+            flight["destination_country"] = airport_info[1]
             flight["duration"] = calculate_flight_hours(flight["duration"])
             transformed_flights.append(flight)
 
