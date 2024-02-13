@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { colors } from "styles/theme/colors";
 
-export const StyledButton = styled.button`
+export const StyledTabButton = styled.button`
   display: flex;
   color: ${(props) =>
     props.color === "primary" ? colors.primary.text : colors.secondary.text};
@@ -11,13 +11,14 @@ export const StyledButton = styled.button`
       : colors.secondary.backgroundColor};
 
   ${(props) =>
-    props.hasBorder &&
+    props.isactive &&
     `
-    border-width: 1px;
-    border-radius: 5px;
+    border-bottom-style: solid;
+    border-width: 0px 0px 4px 0px;
     border-color: ${
       props.color === "primary" ? colors.primary.text : colors.secondary.text
-    };`}
+    };
+    `}
 
   margin: 2px;
   padding: 5px;

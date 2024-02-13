@@ -1,33 +1,26 @@
-import React from 'react';
-import Button from 'components/atoms/button/Button';
-import {StyledTabGroup} from './StyledTabGroup';
-import { useNavigate } from 'react-router-dom';
-import { paths } from 'components/routes/routes';
+import React from "react";
+import TabButton from "components/atoms/tabButton/TabButton";
+import { StyledTabGroup } from "./StyledTabGroup";
+import { useNavigate, useLocation } from "react-router-dom";
 
-
-const TabGroup = () => {
-
+const TabGroup = ({ tabs }) => {
   const navigate = useNavigate();
+
+  const currentPath = useLocation().pathname;
 
   return (
     <StyledTabGroup>
-      <Button 
-        title='Plan Holiday' 
-        color='secondary' 
-        onClick={() => navigate(paths.home)}
-      />
-      <Button 
-        title='Departures' 
-        color='secondary' 
-        onClick={() => navigate(paths.flights)}
-      />
-      <Button
-        title='See Trends' 
-        color='secondary' 
-        onClick={() => navigate(paths.trends)}
-      />
+      {tabs.map((tab) => (
+        <TabButton
+          key={tab.title}
+          title={tab.title}
+          color="secondary"
+          onClick={() => navigate(tab.routeTo)}
+          isactive={tab.routeTo == currentPath}
+        />
+      ))}
     </StyledTabGroup>
-  )
-}
+  );
+};
 
-export default TabGroup
+export default TabGroup;
