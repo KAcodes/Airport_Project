@@ -6,7 +6,9 @@ import { useStore, calendarStore } from "store/store";
 import CityDropdown from "components/atoms/input/CityDropdown";
 
 const SideBar = () => {
-  const { formValues, setFormValue, setAIHolidayResponse } = useStore();
+
+  const { formValues, setFormValue, setAIHolidayResponse, setHotelResponse } =
+    useStore();
   const { selectedDates } = calendarStore();
   const dept_date = selectedDates[0].toLocaleDateString();
   const return_date = selectedDates[1].toLocaleDateString();
@@ -16,9 +18,8 @@ const SideBar = () => {
     setFormValue(name, value);
   };
 
-  //ZOD
-
   const handleSubmit = async (e) => {
+  
     e.preventDefault();
     const formData = formValues;
     const newData = {
@@ -42,7 +43,21 @@ const SideBar = () => {
       console.error("Error fetching Flight information:", error);
     }
 
-    // Clear form after submission if needed
+    try {
+      const response = await fetch("/holiday_planner/hotels", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newData),
+      });
+      const data2 = await response.json();
+      console.log(data2);
+      setHotelResponse(data2);
+    } catch (error) {
+      console.error("Error fetching Hotels:", error);
+    }
+
     setFormValue("search_location", "");
     setFormValue("age", "");
   };
